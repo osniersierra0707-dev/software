@@ -1,0 +1,359 @@
+<!-- ========================= -->
+<!-- WebUsu.html -->
+<!-- ========================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Agendar Cita - CGC</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
+  <script>
+
+    function mostrarAutorizacion() {
+
+      const servicio =
+        document.getElementById("servicio").value;
+
+      const autorizacion =
+        document.getElementById("autorizacionBox");
+
+      if (servicio === "Especialista") {
+
+        autorizacion.classList.remove("hidden");
+
+      } else {
+
+        autorizacion.classList.add("hidden");
+      }
+    }
+
+  </script>
+
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen">
+
+  <!-- HEADER -->
+
+  <header class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-950/70 backdrop-blur-md">
+
+    <div class="flex items-center gap-3">
+
+      <img
+        src="{{ url_for('static', filename='img.png') }}"
+        class="w-12 h-12 object-contain">
+
+      <div>
+
+        <h1 class="font-bold text-lg">
+          Nueva Cita
+        </h1>
+
+        <p class="text-xs text-slate-400">
+          Centro de Gestión Clínica
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="flex gap-4 items-center">
+
+      <a href="/historial"
+         class="text-sm text-indigo-400 font-medium hover:text-indigo-300 transition">
+
+        Ver mis citas
+
+      </a>
+
+      <a href="/logout"
+         class="material-symbols-outlined text-red-400 hover:text-red-300 transition">
+
+        logout
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <main class="flex items-center justify-center p-6">
+
+    <div class="w-full max-w-xl bg-white/5 border border-white/10 p-8 rounded-3xl shadow-2xl backdrop-blur-md">
+
+      <!-- TITULO -->
+
+      <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
+
+        <span class="material-symbols-outlined text-indigo-500">
+          calendar_add_on
+        </span>
+
+        Detalles de la cita
+
+      </h2>
+
+      <!-- ERROR -->
+      {% if error %}
+        <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm animate-pulse">
+          {{ error }}
+        </div>
+      {% endif %}
+      <!-- FORM -->
+
+      <form action="/agendar"
+            method="POST"
+            class="space-y-5">
+
+
+        <!-- NOMBRE -->
+
+        <div>
+
+          <label class="block mb-2 text-sm text-slate-300">
+            Nombre del paciente
+          </label>
+
+          <div class="relative">
+
+            <span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-500">
+              person
+            </span>
+
+            <input
+              type="text"
+              name="nombre"
+
+              value="{{ usuario.Nombre }} {{ usuario.Apellido }}"
+
+              readonly
+
+              class="w-full pl-11 pr-4 py-3.5 bg-slate-950 border border-white/10 rounded-2xl outline-none text-slate-300">
+
+          </div>
+
+        </div>
+
+
+        <!-- IDENTIFICACION -->
+
+        <div>
+
+          <label class="block mb-2 text-sm text-slate-300">
+            Número de identificación
+          </label>
+
+          <div class="relative">
+
+            <span class="material-symbols-outlined absolute left-3 top-3.5 text-slate-500">
+              badge
+            </span>
+
+            <input
+              type="text"
+              name="identificacion"
+
+              value="{{ usuario.ID }}"
+
+              readonly
+
+              class="w-full pl-11 pr-4 py-3.5 bg-slate-950 border border-white/10 rounded-2xl outline-none text-slate-300">
+
+          </div>
+
+        </div>
+
+
+        <!-- SERVICIO -->
+
+        <div>
+
+          <label class="block mb-2 text-sm text-slate-300">
+            Servicio
+          </label>
+
+          <div class="relative">
+
+            <span class="material-symbols-outlined absolute left-3 top-4 text-slate-500">
+              medical_services
+            </span>
+
+            <select
+              id="servicio"
+              name="servicio"
+
+              onchange="mostrarAutorizacion()"
+
+              class="w-full pl-12 p-4 bg-slate-950 border border-white/10 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+
+              required>
+
+              <option value="">
+                Seleccione Servicio
+              </option>
+
+              <option>
+                Consulta General
+              </option>
+
+              <option>
+                Odontología
+              </option>
+
+              <option>
+                Laboratorio
+              </option>
+
+              <option value="Especialista">
+                Especialista
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- AUTORIZACION -->
+
+        <div id="autorizacionBox"
+             class="hidden">
+
+          <label class="block mb-2 text-sm text-slate-300">
+            Número de autorización
+          </label>
+
+          <div class="relative">
+
+            <span class="material-symbols-outlined absolute left-3 top-3.5 text-yellow-400">
+              verified
+            </span>
+
+            <input
+              type="text"
+              name="autorizacion"
+
+              placeholder="Ingrese autorización médica"
+
+              class="w-full pl-11 pr-4 py-3.5 bg-slate-950 border border-yellow-500/30 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-500">
+
+          </div>
+
+        </div>
+
+
+        <!-- FECHA Y HORA -->
+
+        <div class="grid md:grid-cols-2 gap-4">
+
+
+          <!-- FECHA -->
+
+          <div>
+
+            <label class="block mb-2 text-sm text-slate-300">
+              Fecha
+            </label>
+
+            <input
+              type="date"
+
+              name="fecha"
+
+              class="w-full p-4 bg-slate-950 border border-white/10 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+
+              required>
+
+          </div>
+
+
+          <!-- HORA -->
+
+          <div>
+
+            <label class="block mb-2 text-sm text-slate-300">
+              Horario
+            </label>
+
+            <select
+              name="hora"
+
+              class="w-full p-4 bg-slate-950 border border-white/10 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+
+              required>
+
+              <option value="">
+                Selecciona un horario
+              </option>
+
+              <option value="08:00">
+                08:00 AM
+              </option>
+
+              <option value="09:00">
+                09:00 AM
+              </option>
+
+              <option value="10:00">
+                10:00 AM
+              </option>
+
+              <option value="11:00">
+                11:00 AM
+              </option>
+
+              <option value="14:00">
+                02:00 PM
+              </option>
+
+              <option value="15:00">
+                03:00 PM
+              </option>
+
+              <option value="16:00">
+                04:00 PM
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- BOTON -->
+
+        <button
+          type="submit"
+
+          class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] hover:shadow-indigo-500/30 transition-all duration-300 shadow-xl">
+
+          AGENDAR AHORA
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</body>
+
+</html>

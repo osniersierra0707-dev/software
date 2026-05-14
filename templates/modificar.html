@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Modificar Cita - CGC</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen">
+
+  <!-- HEADER -->
+  <header class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-950/50 backdrop-blur-md">
+
+    <div class="flex items-center gap-3">
+
+      <img src="{{ url_for('static', filename='img.png') }}"
+           class="w-10 h-10 object-contain mix-blend-multiply bg-white rounded-lg">
+
+      <h1 class="font-bold">
+        Editar Cita
+      </h1>
+
+    </div>
+
+    <div class="flex gap-4">
+
+      <a href="/historial"
+         class="text-sm text-indigo-400 font-medium hover:underline">
+
+         Ver mis citas
+
+      </a>
+
+      <a href="/logout"
+         class="material-symbols-outlined text-red-400">
+
+         logout
+
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="max-w-xl mx-auto p-8">
+
+    <div class="bg-white/5 border border-white/10 p-6 rounded-3xl shadow-2xl">
+
+      <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+
+        <span class="material-symbols-outlined text-indigo-500">
+          edit_calendar
+        </span>
+
+        Modificar detalles de la cita
+
+      </h2>
+
+      <!-- FORMULARIO -->
+      <form action="/guardar_modificacion" method="POST" class="space-y-4">
+
+        <!-- ID CITA -->
+        <input
+          type="hidden"
+          name="id_citas"
+          value="{{ cita.ID_citas }}"
+        >
+
+        <!-- NOMBRE -->
+        <div class="relative">
+
+          <label class="block mb-2 text-sm text-slate-400">
+            Nombre del paciente
+          </label>
+
+          <div class="w-full pl-11 pr-4 py-3.5 bg-slate-800 border border-white/10 rounded-2xl flex items-center">
+
+            <span class="material-symbols-outlined absolute left-3 text-slate-500 text-xl">
+              person
+            </span>
+
+            <span class="text-white">
+              {{ cita.Nombre }} {{ cita.Apellido }}
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- IDENTIFICACION -->
+        <div class="relative">
+
+          <label class="block mb-2 text-sm text-slate-400">
+            Número de identificación
+          </label>
+
+          <div class="w-full pl-11 pr-4 py-3.5 bg-slate-800 border border-white/10 rounded-2xl flex items-center">
+
+            <span class="material-symbols-outlined absolute left-3 text-slate-500 text-xl">
+              badge
+            </span>
+
+            <span class="text-white">
+              {{ cita.ID }}
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- SERVICIO -->
+        <div>
+
+          <label class="block mb-2 text-sm text-slate-400">
+            Servicio
+          </label>
+
+          <select
+            name="descripcion"
+            class="w-full p-4 bg-slate-950 border border-white/5 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          >
+
+            <option value="">Seleccione Servicio</option>
+
+            <option value="Consulta General"
+              {% if cita.Descripcion == 'Consulta General' %}selected{% endif %}>
+              Consulta General
+            </option>
+
+            <option value="Odontología"
+              {% if cita.Descripcion == 'Odontología' %}selected{% endif %}>
+              Odontología
+            </option>
+
+            <option value="Laboratorio"
+              {% if cita.Descripcion == 'Laboratorio' %}selected{% endif %}>
+              Laboratorio
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- FECHA Y HORA -->
+        <div class="grid grid-cols-2 gap-4">
+
+          <!-- FECHA -->
+          <div>
+
+            <label class="block mb-2 text-sm text-slate-400">
+              Fecha
+            </label>
+
+            <input
+              type="date"
+              name="fecha"
+              value="{{ cita.Fecha.strftime('%Y-%m-%d') }}"
+              class="w-full p-4 bg-slate-950 border border-white/5 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            >
+
+          </div>
+
+          <!-- HORA -->
+          <div>
+
+            <label class="block mb-2 text-sm text-slate-400">
+              Hora
+            </label>
+
+            <select
+              name="hora"
+              class="w-full p-4 bg-slate-950 border border-white/5 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            >
+
+              <option value="">Selecciona un horario</option>
+
+              <option value="08:00"
+                {% if cita.Hora|string == '08:00:00' %}selected{% endif %}>
+                08:00 AM
+              </option>
+
+              <option value="09:00"
+                {% if cita.Hora|string == '09:00:00' %}selected{% endif %}>
+                09:00 AM
+              </option>
+
+              <option value="10:00"
+                {% if cita.Hora|string == '10:00:00' %}selected{% endif %}>
+                10:00 AM
+              </option>
+
+              <option value="11:00"
+                {% if cita.Hora|string == '11:00:00' %}selected{% endif %}>
+                11:00 AM
+              </option>
+
+              <option value="14:00"
+                {% if cita.Hora|string == '14:00:00' %}selected{% endif %}>
+                02:00 PM
+              </option>
+
+              <option value="15:00"
+                {% if cita.Hora|string == '15:00:00' %}selected{% endif %}>
+                03:00 PM
+              </option>
+
+              <option value="16:00"
+                {% if cita.Hora|string == '16:00:00' %}selected{% endif %}>
+                04:00 PM
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <!-- BOTONES -->
+        <div class="flex gap-4 pt-4">
+
+          <a href="/historial"
+             class="w-1/2 text-center bg-slate-700 py-4 rounded-2xl font-bold hover:bg-slate-600 transition-all">
+
+             Cancelar
+
+          </a>
+
+          <button
+            type="submit"
+            class="w-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 py-4 rounded-2xl font-bold hover:scale-[1.02] transition-all shadow-xl"
+          >
+
+            GUARDAR CAMBIOS
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</body>
+</html>
